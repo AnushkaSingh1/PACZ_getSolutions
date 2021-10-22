@@ -1,36 +1,35 @@
 const express = require("express");
 const Problem = require("./problem.model");
+const router = express.Router();
 
-const prob = express();
-
-prob.get("/problem", async (_, res) => {
+router.get("/", async (req, res) => {
   const problems = await Problem.find();
   res.json(problems);
 });
 
-prob.get("problem/:_id", async (req, res) => {
+router.post("/newProblem", async (req, res) => {
+  const newProblem = new Person({
+    title:req.body.title,
+    description: req.body.description,
+    flair:req.body.flair
+
+  })
+  try {
+  await Person.save();
+  } catch (error) {
+    console.log(error);
+  }
+  res.json(newProblem);
+});
+
+router.get("/:_id", async (req, res) => {
   const problem = await Problem.findById(req.params._id);
   res.json(problem);
 });
 
-prob.post("/problem", async (req, res) => {
-  const newProblem = await Problem.create(
-    req.body.title,
-    req.body.description,
-    req.body.flair
-  );
-
-  res.json(newProblem);
-});
-
-prob.put("/problem/:_id", async (req, res) => {
-  const updateProblem = await Problem.findById(req.params._id);
-  res.redirect("/problem");
-});
-
-prob.delete("problem/:_id", async (req, res) => {
+router.delete("/:_id", async (req, res) => {
   const deleteProblem = await Problem.findByIdAndDelete(req.params._id);
   res.redirect("/problem");
 });
 
-module.exports = prob;
+module.exports = router;
