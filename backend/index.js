@@ -10,6 +10,7 @@ mongoose.connect(process.env.MONGO_URI,()=>{
   console.log('Connected to DB!');
 })
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
@@ -17,7 +18,7 @@ app.get("/", (req, res) => {
   res.send("Yay the server works for now");
 });
 
-app.route("/problem", prob);
+app.use("/problem", prob);
 
 app.listen(PORT, () => {
   console.log(`Connected to PORT:${PORT}`);

@@ -8,18 +8,18 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/newProblem", async (req, res) => {
-  const newProblem = new Person({
+  const newProblem = new Problem({
     title:req.body.title,
     description: req.body.description,
     flair:req.body.flair
-
   })
   try {
-  await Person.save();
+   const savedNow = await newProblem.save();
+  res.send(savedNow._id);
   } catch (error) {
     console.log(error);
+    res.send(error);
   }
-  res.json(newProblem);
 });
 
 router.get("/:_id", async (req, res) => {
